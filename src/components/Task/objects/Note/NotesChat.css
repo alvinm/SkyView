@@ -1,0 +1,85 @@
+/* NotesChat.css */
+
+.notes-content {
+  padding: 16px;
+}
+.chat-footer{
+    position:absolute;
+    width:100%;
+    height:6.5vh;
+    bottom:0vh;
+    left:0%;
+    background-color: #fff;
+    z-index: 1001;
+    border:1px solid #eee;
+    padding:5px;
+    margin-bottom: 5px;
+}
+.chat-header{
+    position:absolute;
+    width:100%;
+    height:5vh;
+    top:0vh;
+    left:0%;
+    background-color: #fff;
+    z-index: 1001;
+    border:1px solid #eee;
+}
+.chat-container {
+  z-index: 1000;
+  position: absolute;
+  left: 19%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 1000;
+  height: 65%;
+  width:55%;
+  border:1px solid #eee;
+  /*border-radius: 20px;*/
+  background: #f5f5f5;
+  padding-top: 5vh;
+  padding-bottom: 5vh;
+   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.chat-bubble {
+  max-width: 70%;
+  padding: 10px 15px;
+  margin: 5px 0;
+  border-radius: 15px;
+  font-size: 22px;
+}
+
+.sent {
+  background-color: #dcf8c6; /* WhatsApp green bubble */
+  width:40%
+}
+
+.received {
+  background-color: #ffffff; /* White bubble */
+  border: 1px solid #ddd;
+}
+
+/* Drop-down panel */
+.chat-dropdown {
+  z-index: 1000;
+  position: absolute;
+  bottom: 80px; /* above the FAB */
+  right: 20px;
+  width: 40%;
+  height: 800px;
+  overflow: hidden;
+  background: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: max-height 0.3s ease, padding 0.3s ease;
+
+}
+
+.chat-dropdown.open {
+  height: 800px;
+  max-height: 800px;
+  padding: 10px;
+  z-index: 1000;
+}

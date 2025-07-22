@@ -1,0 +1,77 @@
+.login-container {
+    position:absolute;
+    top:20%;
+      /*display: flex;              Enable Flexbox */
+    /*flex-direction: column;          Arrange items in a row */
+    justify-content: center;      /*Center items horizontally */
+    /*align-items: center;          Center items vertically */
+    gap: 10px;       
+    width:20%;
+    height:60vh;
+    background-color: #fff;   
+    border-radius: 10px;  
+    left:40%;
+     /*margin-top:20%;      Add space between items */
+}
+/*
+.item {
+    background: lightblue;
+    border-radius: 10px;
+    width:80%;
+    padding: 20px;
+    border: 1px solid #ddd;
+}*/
+.item {
+    background: #fff;
+    border-radius: 10px;
+    width:100%;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+.button-item {
+    background: #fff;
+    border-radius: 10px;
+    width:30%;
+    margin-left:50%;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+/* Placeholder Container */
+.placeholder-container {
+    position: relative;
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+    min-height: 40px; /* Adjust as needed */
+    border-radius: 5px;
+    color: #333;
+    background: #fff;
+    outline: none;
+}
+
+/* Add the placeholder effect using :empty and ::before */
+.placeholder-container:empty::before {
+    content: attr(data-placeholder); /* Use the data-placeholder attribute */
+    color: #aaa; /* Placeholder text color */
+    font-style: italic;
+    pointer-events: none; /* Prevent placeholder from being selectable */
+}
+  
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #000;
+}
+
+.toggle-password:hover {
+    text-decoration: underline;
+}
