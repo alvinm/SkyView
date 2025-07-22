@@ -5,7 +5,6 @@ import { getLocation } from '../components/GlobalFunctions/Functions'
 import DistanceSlider from '../components/Objects/Range';
 
 import { arrowBackCircleOutline, toggleOutline } from 'ionicons/icons';
-import GoogleLoginComponent from '../components/Logins/Google/Google';
 import Login from '../components/Logins/LoginIndex';
 import HomeView from '../components/Home/HomeView'
 
