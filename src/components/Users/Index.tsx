@@ -1,422 +1,187 @@
 import { IonCol, IonIcon, IonImg, IonItem, IonLabel, IonRow, IonSelect, IonSelectOption } from '@ionic/react'
-import { businessOutline, checkmarkCircleOutline, person, saveOutline } from 'ionicons/icons'
+import { add, businessOutline, checkmarkCircleOutline, checkmarkOutline, closeCircleOutline, peopleOutline, person, personAddOutline, saveOutline } from 'ionicons/icons'
 import React, { useEffect, useRef, useState } from 'react'
 import TextToInputSave from '../Objects/Edit/TextToInputSave'
 import ImageController from '../DocumentController/DocumentController'
+import TextToDDL from '../Objects/Edit/TextToDDL'
+import { getPastelColor } from '../GlobalFunctions/Functions'
 
-const UserDetails = (props:any) =>{
-    const [image, setImage]                                     = useState<any>('../images/IntelRock.JPG')
-    const [hideImageControllerView, showImageControllerView]    = useState<any>()
+const Users = (props:any) =>{
     const[getEmail, setEmail]                       = useState<any>()
     const[getForename, setForename]                 = useState<any>()
     const[getSurname, setSurname]                   = useState<any>()
-    const[getShopName, setShopName]                 = useState<any>("Set Shop/Service Name")
-    const[getShopType, setShopType]                 = useState<any>("Set Shop/Service Type")
-    const[getCurrency, setCurrency]                 = useState<any>("Set Transaction Currency")
-    const[getCountry, setCountry]                   = useState<any>("Set Country")
-    const[getVATNo, setVATNo]                       = useState<any>("Set VAT No.")
-    const[getTaxNo, setTaxNo]                       = useState<any>("Company Tax No.")
+    const[getRole, setRole]                         = useState<any>("")
+    const[getCompanyTypeId, setCompanyTypeId]       = useState<any>(4)
 
     const[getForenameView, setForenameView]         = useState<any>()
     const[getSurnameView, setSurnameView]           = useState<any>()
     const[getShopNameView, setShopNameView]         = useState<any>()
-    const[getShopTypeView, setShopTypeView]         = useState<any>()
-    const[getCurrencyView, setCurrencyView]         = useState<any>()
-    const[getCountryView, setCountryView]           = useState<any>()
-    const[getVATNoView, setVATNoView]               = useState<any>()
-    const[getTaxNoView, setTaxNoView]               = useState<any>()
+    const [getCountryOptions, setCountryOptions]    = useState<any>()                      
 
-    const[getShopId       , setShopId]              = useState<any>(0)
-    const[getShopGUID     , setShopGUID]            = useState<any>('')
-    const[getShopTypeId   , setShopTypeId]          = useState<any>(0)
-    const[getCurrencyId   , setCurrencyId]          = useState<any>(0)
-    const[getCountryId    , setCountryId]           = useState<any>(0)
+    const[userList, setUserList]                    = useState<any>()
+    const[getContractorLevelData, setContractorLevelData]   = useState<any>()
+    const[newUser, showNewUser]                     = useState<any>()
 
-    const [getCountryOptions, setCountryOptions]    = useState<any>()
-    const [getCurrencyOptions, setCurrencyOptions]  = useState<any>()
-    const [getShopTypeOptions, setShopTypeOptions]  = useState<any>()
-
-    const ddlCountryId                              = useRef<any>(0)
-    const ddlShopTypeId                             = useRef<any>(0)
-    const ddlCurrencyId                             = useRef<any>(0)                             
-
-    const callList = async (parent_id:any) =>{
-        var response:any = await fetch(props.state.secondary_host+'getData?dbo=select_list'+
-            "&parent_id="+parent_id,
+    const callList = async () =>{
+        var response:any = await fetch(props.state.secondary_host+'getData?admin=select_list'+
+            "&parent_id="+22,
         )
         const data = await response.json();
-        const list = data.map((x: any) => ({
-            id                  : x.id || 'Unknown', 
-            name                : x.description || 'No Option',// Ensure fallback if name is missing
-        }));
-        var options : any = []
-        /**Store Type */
-        if(parent_id == 4){
-            options =  data.map((x:any, i:number)=>{
-                return(
-                    <IonSelectOption key={i} value={x.id}>
-                        {x.description}
-                    </IonSelectOption>
-                )
-            })
-            setShopTypeOptions(options)
-        }
-    }
-    const callCountry = async () =>{
-        var response:any = await fetch(props.state.secondary_host+'getData?dbo=select_country',
-        )
-        const data = await response.json();
-        const list = data.map((x: any, i:number) => {
+         const list:any = data.map((x:any, i:number)=>{
             return(
-                <IonSelectOption key={i} value={x.id}>
-                    {x.country}
+                <IonSelectOption value={x.id}>
+                    {x.list_desc}
                 </IonSelectOption>
             )
-        });
-       setCountryOptions(list)
-    }
-    const callCurrency = async () =>{
-        var response:any = await fetch(props.state.secondary_host+'getData?dbo=select_currency_list',
-        )
-        const data = await response.json();
-        const list = data.map((x: any, i:number) => {
-            return(
-                <IonSelectOption key={i} value={x.id}>
-                    {x.currency_code}
-                </IonSelectOption>
-            )
-        });
-       setCurrencyOptions(list)
-    }
-    const setUserDetails = () =>{
-            console.log("user_id="     +props.state.user_id)
-            console.log("forename="    +getForename)
-            console.log("surname="     +getSurname)
-            console.log("email="       +getEmail)
-            console.log("shop_name="   +getShopName)
-            console.log("shop_id="     +getShopId)
-            console.log("shop_type_id="+getShopTypeId)
-            console.log("currency_id=" +getCurrencyId)
-            console.log("country_id="  +getCountryId)
-            console.log("tax_no="      +getTaxNo)
-            console.log("vat_no="      +getVATNo)
-        
-        fetch(props.state.secondary_host+'getData?dbo=update_user_details'+
-            "&user_id="+props.state.user_id+
-            "&forename="+getForename+
-            "&surname="+getSurname+
-            "&email="+getEmail+
-            "&shop_name="+getShopName+
-            "&shop_id="+getShopId+
-            "&shop_type_id="+getShopTypeId+
-            "&currency_id="+getCurrencyId+
-            "&country_id="+getCountryId+
-            "&tax_no="+getTaxNo+
-            "&vat_no="+getVATNo
-            ,
-        )
-        .then((response) => response.json())
-        .then(data=>{
-            setShopId(data[0].shop_id)
         })
+        setContractorLevelData(list)
     }
-    const handleChange = (e:any, action:any) =>{
-        const selectedValue = e.detail.value; // Get the selected value (ID)
-        let selectElement:any = null; // Get the IonSelect element from ref
-        if(action == 3)
-            selectElement = ddlCurrencyId.current;// Get the IonSelect element from ref
-        if(action == 4)
-            selectElement = ddlShopTypeId.current; // Get the IonSelect element from ref
-        if(action == 2)
-            selectElement = ddlCountryId.current; // Get the IonSelect element from ref
-        
-        console.log(selectElement)
-
-        if (selectElement) {
-            // Find the selected option using the ref
-            const selectedOption = selectElement.querySelector(`ion-select-option[value="${selectedValue}"]`);
-            
-            if (selectedOption) {
-              const selectedText = selectedOption.textContent; // Get the text of the selected option
-                if(action == 3){
-                    setCurrency(selectedText);
-                    setCurrencyId(selectedValue);
-                    setCurrencyView(!getCurrencyView)
-                }
-                if(action == 4){
-                    setShopType(selectedText);
-                    setShopTypeId(selectedValue);
-                    setShopTypeView(!getShopTypeView)
-                }
-                if(action == 2){
-                    setCountry(selectedText);
-                    setCountryId(selectedValue);
-                    setCountryView(!getCountryView)
-                }
-              console.log("Selected option text:", selectedText); // Logs the selected text
-              console.log("Selected option ID:", selectedValue);   // Logs the selected value (ID)
-      
-              
-            } else {
-              console.warn("No matching option found for value:", selectedValue);
-            }
-          } else {
-            console.warn("IonSelect element not found");
-          }
-    }
-    const callShopImage = async () =>{
-        let stream:any = ''
-        stream = await fetch(props.state.secondary_host+'getImage?dbo=select_product_image'+
-            "&barcode_id="+getShopGUID
+    const callUsers = async () =>{
+        var response:any = await fetch(props.state.secondary_host+'getData?dbo=select_users'+
+            "&contact_id="+props.state.user_id+
+            "&company_type_id="+getCompanyTypeId,
         )
+        const data = await response.json();
         
-        const blob  = await stream.blob();
-        const url = URL.createObjectURL(blob);
-        console.log(url)
-        return(url)
+        const list:any = data.map((x:any, i:number)=>{
+            return(
+                <IonRow className="size-24">
+                    <IonCol><div className="text-container ion-padding" style={{backgroundColor:getPastelColor(x.user_name)}}>{x.user_name}</div></IonCol>
+                    <IonCol><div className="text-container ion-padding" >{x.email}</div></IonCol>
+                    <IonCol><div className="text-container ion-padding" >{x.contractor_level}</div></IonCol>
+                    <IonCol className="ion-text-right">{(x.rate_to_firm/1).toFixed(2)}</IonCol>
+                    <IonCol className="ion-text-right">{(x.rate_to_client/1).toFixed(2)}</IonCol>
+                    <IonCol size="1" className='ion-text-center'>
+                        {x.is_active = 1?
+                                <IonIcon icon={checkmarkCircleOutline} className='size-48 text-green'></IonIcon>:
+                                <IonIcon icon={closeCircleOutline} className='size-48 text-red'></IonIcon>
+                        }
+                    </IonCol>
+                </IonRow>
+            )
+        })
+        setUserList(list)
     }
-
+   
     useEffect(()=>{
-            //
-        console.log(getCurrency)
-    },[getCurrency])
+        callUsers()
+    },[getCompanyTypeId])
     useEffect(()=>{
-        //
-        console.log(getShopType)
-    },[getShopType])
-    useEffect(()=>{
-        //
-        console.log(getCountry)
-    },[getCountry])
-    useEffect(()=>{
-        setEmail(props.state.email)
-        setForename(props.state.forename)
-        setSurname(props.state.surname)
-        setShopName(props.state.user_store_name)
-        setShopType(props.state.user_store_type)
-        setShopTypeId(props.state.user_store_type_id)
-        setShopId(props.state.user_store_id)
-        setShopGUID(props.state.user_store_guid)
-        setCurrency(props.state.user_store_currency)
-        setCountry(props.state.user_store_country)
-        setVATNo(props.state.user_store_vat_no)
-        setTaxNo(props.state.user_store_tax_no)
-        callList(4)
-        callCountry()
-        callCurrency()
+        callUsers()
+        callList()
     },[props])
     return(
         <div>
             <IonRow>
-                <IonCol size="2" className="">
-                    <IonIcon icon={person} className="size-36"></IonIcon>
+                <IonCol size="1" className="">
+                    <IonIcon icon={peopleOutline} className="size-48"></IonIcon>
                 </IonCol>
-                <IonCol size="8" className="size-24 ion-padding">
-                    User Details
+                <IonCol size="2" className="size-24 ion-padding ion-text-bold ion-text-left">
+                    Users
                 </IonCol>
-            </IonRow>
-            <IonRow>
-                <IonCol size="12" className="greyed-out">{getEmail}</IonCol>
-                <IonCol size="12"></IonCol>
-            </IonRow>
-            <IonRow>
-                {!getForenameView &&
-                    <IonCol onClick={()=>{setForenameView(!getForenameView)}} size="12" className="cool-professional ion-padding">{getForename}</IonCol>
-                }
-                {getForenameView &&
-                    <IonCol size="12">
-                        <TextToInputSave
-                            placeholder_text="Edit Forename"
-                            text=""
-                            result={(e:any)=>{
-                                setForename(e)
-                                setForenameView(!getForenameView)
-                            }}
-                        />
-                    </IonCol>
-                }
-            </IonRow>
-            <IonRow>
-                {!getSurnameView &&
-                    <IonCol onClick={()=>{setSurnameView(!getSurnameView)}} size="12" className="cool-professional ion-padding">{getSurname}</IonCol>
-                }
-                {getSurnameView &&
-                    <IonCol size="12">
-                        <TextToInputSave
-                            placeholder_text="Edit Surname"
-                            text={""}
-                            result={(e:any)=>{
-                                setSurname(e)
-                                setSurnameView(!getSurnameView)
-                            }}
-                        />
-                    </IonCol>
-                }
-            </IonRow>
-           
-                <IonRow>
-                    <IonCol size="2" className="ion-padding">
-                        <IonIcon icon={businessOutline} className="size-36"></IonIcon>
-                    </IonCol>
-                    <IonCol size="8" className="size-24 ion-padding">
-                        My Shop Details
-                    </IonCol>
-                </IonRow>
-                <IonRow>
-                    {(getShopId != 0) &&
-                    <div>
-                        <IonCol size="3"></IonCol>
-                        <IonCol>
-                            <IonImg
-                                src={image} 
-                                alt={"Shop ID"} 
-                                onClick={()=>{hideImageControllerView(!hideImageControllerView)}}
-                            />
+                {!newUser &&<IonCol></IonCol>}
+                {!newUser &&
+                <IonCol>
+                    <IonRow>
+                        <IonCol  className="size-16 ion-padding ion-text-bold" onClick={()=>{setCompanyTypeId(35)}}>
+                            <div className="ion-padding text-container ion-text-center">Startup</div>
                         </IonCol>
-                        <IonCol size="3"></IonCol>
+                        <IonCol  className="size-16 ion-padding ion-text-bold" onClick={()=>{setCompanyTypeId(36)}}>
+                            <div className="ion-padding text-container ion-text-center">Micro</div>
+                        </IonCol>
+                        <IonCol  className="size-16 ion-padding ion-text-bold" onClick={()=>{setCompanyTypeId(4)}}>
+                            <div className="ion-padding text-container ion-text-center">Small</div>
+                        </IonCol>
+                        <IonCol  className="size-16 ion-padding ion-text-bold" onClick={()=>{setCompanyTypeId(34)}}>
+                            <div className="ion-padding text-container ion-text-center">Medium</div>
+                        </IonCol>
+                        <IonCol  className="size-16 ion-padding ion-text-bold" onClick={()=>{setCompanyTypeId(33)}}>
+                            <div className="ion-padding text-container ion-text-center">Large</div>
+                        </IonCol>
+                    </IonRow>
+                </IonCol>
+                }
+
+                {newUser &&
+                    <IonCol className='ion-text-left size-24 ion-text-bold' style={{borderBottom:"1px solid #000"}}>
+                        <IonIcon icon={personAddOutline} className="size-48"></IonIcon>
+                        &nbsp;Add New Consultant
+                    </IonCol>
+                }
+            </IonRow>
+            <IonRow>
+                <IonCol size="3">
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold' onClick={()=>{showNewUser(!newUser)}}>
+                        <IonCol size="1"><IonIcon icon={personAddOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Add New Consultant</IonCol>
+                    </IonRow>
+                    <IonRow><IonCol></IonCol></IonRow>
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={peopleOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Existing Consultant</IonCol>
+                    </IonRow>
+                </IonCol>
+                <IonCol>
+                    {!newUser &&
+                    <IonRow className="size-24 ion-text-bold ion-padding" style={{backgroundColor:"lightblue",color:"darkblue", borderRadius:"20px"}}>
+                        <IonCol>Contractor<br/>&nbsp;<br/>&nbsp;</IonCol>
+                        <IonCol>Email</IonCol>
+                        <IonCol>Role</IonCol>
+                        <IonCol className="ion-text-right ion-padding">Firm Rate</IonCol>
+                        <IonCol className="ion-text-right ion-padding">Client Rate</IonCol>
+                        <IonCol size="1" className='ion-text-center ion-padding'>Status</IonCol>
+                    </IonRow>
+                    }
+                    {newUser &&
+                    <div>
+                        <IonRow><IonCol></IonCol></IonRow>
+                        <IonRow className="size-24">
+                            <IonCol size="2">
+                                <TextToInputSave 
+                                    placeholder_text={"Forename"}
+                                    text={""}
+                                    result={(e:any)=>{setForename(e)}}
+                                />
+                            </IonCol>
+                            <IonCol size="2">
+                                <TextToInputSave 
+                                    placeholder_text={"Surname"}
+                                    text={""}
+                                    result={(e:any)=>{setSurname(e)}}
+                                />
+                            </IonCol>
+                            <IonCol size="2">
+                                <TextToInputSave 
+                                    placeholder_text={"Email"}
+                                    text={""}
+                                    result={(e:any)=>{setEmail(e)}}
+                                />
+                            </IonCol>
+                            <IonCol size="2">
+                                <TextToDDL
+                                    placeholder_text={"Contractor Level"}
+                                    options={getContractorLevelData}
+                                    text={getRole}
+                                    result={(e:any)=>{setRole(e.text)}}
+                                />
+                            </IonCol>
+                            <IonCol></IonCol>
+                            <IonCol size="1" className="ion-padding">
+                                <div className='text-container ion-text-center ion-padding'>
+                                    <IonIcon icon={add} className='size-48'></IonIcon>
+                                </div>
+                            </IonCol>
+                        </IonRow>
                     </div>
                     }
-                </IonRow>
-            {!hideImageControllerView &&
-            <div>
-                <IonRow>
-                    {!getShopNameView &&
-                        <IonCol onClick={()=>{setShopNameView(!getShopNameView)}} size="12" className="cool-professional ion-padding">{getShopName}</IonCol>
-                    }
-                    {getShopNameView &&
-                        <IonCol size="12">
-                            <TextToInputSave
-                                placeholder_text="Edit Shop Name"
-                                text=""
-                                result={(e:any)=>{
-                                    setShopName(e)
-                                    setShopNameView(!getShopNameView)
-                                }}
-                            />
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    {!getShopTypeView &&
-                        <IonCol onClick={()=>{setShopTypeView(!getShopTypeView)}} size="12" className="cool-professional ion-padding">{getShopType}</IonCol>
-                    }
-                    {getShopTypeView &&
-                        <IonCol size="12">
-                            <IonItem className="chevron-right">
-                                <IonLabel position="stacked">Select Shop Type</IonLabel>
-                                <IonSelect ref={ddlShopTypeId} onIonChange={(e)=>{handleChange(e,4)}}>
-                                    {getShopTypeOptions}
-                                </IonSelect>
-                            </IonItem>
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    {!getCountryView &&
-                        <IonCol onClick={()=>{setCountryView(!getCountryView)}} size="12" className="cool-professional ion-padding">{getCountry}</IonCol>
-                    }
-                    {getCountryView &&
-                        <IonCol size="12">
-                            <IonItem>
-                                <IonLabel position="stacked">Select Your Country</IonLabel>
-                                <IonSelect ref={ddlCountryId} onIonChange={(e)=>{handleChange(e,2)}}>
-                                    {getCountryOptions}
-                                </IonSelect>
-                            </IonItem>
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    {!getCurrencyView &&
-                        <IonCol onClick={()=>{setCurrencyView(!getCurrencyView)}} size="12" className="cool-professional ion-padding">{getCurrency}</IonCol>
-                    }
-                    {getCurrencyView &&
-                        <IonCol size="12">
-                            <IonItem>
-                                <IonLabel position="stacked">Select Base Currency</IonLabel>
-                                <IonSelect ref={ddlCurrencyId} onIonChange={(e)=>{handleChange(e,3)}}>
-                                    {getCurrencyOptions}
-                                </IonSelect>
-                            </IonItem>
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    <IonCol size="2" className="ion-padding">
-                        <IonIcon icon={checkmarkCircleOutline} className="size-36"></IonIcon>
-                    </IonCol>
-                    <IonCol size="8" className="size-24 ion-padding">
-                        Compliance 
-                    </IonCol>
-                </IonRow>
-                <IonRow>
-                    {!getTaxNoView &&
-                        <IonCol onClick={()=>{setTaxNoView(!getTaxNoView)}} size="12" className="cool-professional ion-padding">{getTaxNo}</IonCol>
-                    }
-                    {getTaxNoView &&
-                        <IonCol size="12">
-                            <TextToInputSave
-                                placeholder_text="Edit Company Tax No."
-                                text=""
-                                result={(e:any)=>{
-                                    setTaxNo(e)
-                                    setTaxNoView(!getTaxNoView)
-                                }}
-                            />
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    {!getVATNoView &&
-                        <IonCol onClick={()=>{setVATNoView(!getVATNoView)}} size="12" className="cool-professional ion-padding">{getVATNo}</IonCol>
-                    }
-                    {getVATNoView &&
-                        <IonCol size="12">
-                            <TextToInputSave
-                                placeholder_text="Edit VAT/Sales Tax No."
-                                text=""
-                                result={(e:any)=>{
-                                    setVATNo(e)
-                                    setVATNoView(!getVATNoView)
-                                }}
-                            />
-                        </IonCol>
-                    }
-                </IonRow>
-                <IonRow>
-                    <IonCol className="">
-                        <div onClick={()=>{setUserDetails()}} className="ion-text-hover fresh-natural ion-text-center">
-                        <IonRow>
-                            <IonCol size='2' >
-                                <IonIcon icon={saveOutline} className="size-20"></IonIcon>
-                            </IonCol>
-                            <IonCol>Save Changes</IonCol>
-                        </IonRow>
+                    {!newUser &&
+                        <div>
+                            {userList}
                         </div>
-                    </IonCol>
-                </IonRow>
-            </div>
-            }
-            {hideImageControllerView &&
-            <IonRow>
-                <IonCol>
-                    <ImageController
-                        state={props.state}
-                        barcode={getShopGUID}
-                        results={(e:any)=>{
-                            if(e != -1){
-                                callShopImage()
-                                showImageControllerView(false)
-                            }else{
-                                showImageControllerView(false)
-                            }
-                        }}
-                    />
+                    }
                 </IonCol>
             </IonRow>
-            }
-            
         </div>
     )
 }
-export default UserDetails
+export default Users

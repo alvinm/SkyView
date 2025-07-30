@@ -20,7 +20,7 @@ const TextToInputSave = (props:any) =>{
                         <IonIcon icon={props.icon} className="size-20"></IonIcon>
                         <div 
                             className="text-container ion-padding"
-                            style={{backgroundColor:getPastelColor(props.text)}}
+                            style={{}}
                             onClick={()=>{setViewText(!getViewText)}}
                         >
                             {getPlaceholder}

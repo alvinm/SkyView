@@ -7,12 +7,14 @@ import DistanceSlider from '../components/Objects/Range';
 import { arrowBackCircleOutline, toggleOutline } from 'ionicons/icons';
 import Login from '../components/Logins/LoginIndex';
 import HomeView from '../components/Home/HomeView'
+import MyTasks from '../components/MyTasks/Index';
 
 const Home: React.FC = () => {
   const [getUserId, setUserId]            = useState<any>()
   
   const [getHomeView, setHomeView]        = useState<any>()
   const [getLoginView, setLoginView]      = useState<any>()
+ 
   const [getAdminView, setAdminView]      = useState<any>()
   const [getCalendarView, setCalendarView]  = useState<any>()
 
@@ -82,6 +84,7 @@ const Home: React.FC = () => {
       case 1:setAdminView(true);break;
       case 2:setHomeView(true);break;
       case 3:setCalendarView(true);break;
+     
     }
   }
 
@@ -89,7 +92,8 @@ const Home: React.FC = () => {
     setAdminView(false);
     setLoginView(false);
     setHomeView(false);
-    setCalendarView(false)
+    setCalendarView(false);
+    
   }
 
 
@@ -99,7 +103,6 @@ const Home: React.FC = () => {
 
   return (
     <div> 
-      <IonRow><IonCol>&nbsp;</IonCol></IonRow>
       {getLoginView &&
       <div>
         <Login 

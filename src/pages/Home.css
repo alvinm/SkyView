@@ -128,7 +128,7 @@
     color:darkgrey;
 }
 .ion-text-hover-blue{
-    color:blue;
+    color:lightblue;
 }
 .ion-text-hover-blue:hover{
     cursor:pointer;
@@ -147,6 +147,16 @@
     text-overflow: ellipsis;
     width: 200px; /* Set a fixed width */
     display: block;
+}
+.text-container-borderless{
+    background-color: #fff;
+    border-radius:20px;
+    border:2px solid #fff;
+    min-height:40px;
+    height:auto;
+    padding:5px;
+    text-wrap:initial;
+    width:auto;
 }
 .text-container-empty{
     background-color: #fff;
@@ -174,9 +184,11 @@
     width:auto;
 }
 .text-container:hover{
-    opacity: 0.5;
     cursor:pointer;
-    color:red;
+    color:#005BD3;
+    border:0px solid;
+    background-color: #DEF1FF;
+    font-size: 24.75px;
 }
 
 .header-row{

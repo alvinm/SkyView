@@ -21,7 +21,7 @@ const TaskCategoryList = (props:any) =>{
     const render = () =>{
         const array = props.data.map((x:any, i:number)=>{
             return(
-            <div key={i} className="ion-padding">
+            <div key={i} className="ion-padding" >
             <div style={{marginBottom:"1vh",border:"1px solid "+getPastelColor(x.name),borderRadius:"20px"}}>
                 <IonRow  
                     style={{borderBottom:"1px solid #eee", fontWeight:"bold"}}
@@ -81,11 +81,17 @@ const TaskCategoryList = (props:any) =>{
                                         <IonCol className="size-18">Description</IonCol>
                                     </IonRow>
                                 </IonCol>
-                                <IonCol></IonCol>
                                 <IonCol size="2" className="ion-text-left">
                                     <IonRow>
                                         <IonCol className="size-24">
                                             <b>Assigned User</b>
+                                        </IonCol>
+                                    </IonRow>
+                                </IonCol>
+                                <IonCol size="2" className="ion-text-left">
+                                    <IonRow>
+                                        <IonCol className="size-24">
+                                            <b>Reviewer</b>
                                         </IonCol>
                                     </IonRow>
                                 </IonCol>

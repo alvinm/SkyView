@@ -1,6 +1,7 @@
 import { IonCol, IonIcon, IonInput, IonItem, IonLabel, IonRow, IonSelect } from '@ionic/react'
 import { addCircle, closeCircle, closeOutline, pencilOutline } from 'ionicons/icons'
 import React, { useRef, useState } from 'react'
+import { getPastelColor } from '../../GlobalFunctions/Functions'
 
 const TextToDDL = (props:any) =>{
     const [getViewText, setViewText]        = useState<any>(true)
@@ -15,11 +16,13 @@ const TextToDDL = (props:any) =>{
                 {getViewText &&
                     <IonRow>
                         <IonCol>
+                            <IonIcon icon={props.icon} className="size-20"></IonIcon>
                             <div 
-                                className="text-container ion-padding"
+                                className="text-container ion-padding "
+                                style={{backgroundColor:getPastelColor(props.text)}}
                                 onClick={()=>{setViewText(!getViewText)}}
                             >
-                                {props.text}
+                                {props.placeholder_text}
                             </div>
                         </IonCol>
                     </IonRow>
@@ -32,6 +35,8 @@ const TextToDDL = (props:any) =>{
                                 <IonSelect 
                                     ref={ddlGeneral}
                                     onIonChange={(e)=>{
+                                        var x:any = []
+                                        x.push({value:e.detail.value, text:e.target.innerText})
                                         props.result(e.detail.value)
                                         
                                     }}

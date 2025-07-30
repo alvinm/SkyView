@@ -1,4 +1,4 @@
-import { IonCol, IonFooter, IonIcon, IonInput, IonRow } from "@ionic/react";
+import { IonCol, IonFooter, IonIcon, IonImg, IonInput, IonLabel, IonRow } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import ProjectList from "../Project/Project";
 import TaskList from "../Task/Task";
@@ -6,16 +6,20 @@ import TaskCategoryList from "../Task/TaskType/TaskCategory";
 import { formatDateTime, getPastelColor } from "../GlobalFunctions/Functions";
 import NotesChat from "../Task/objects/Note/NotesChat";
 import '../Task/objects/Note/NotesChat.css'
-import { attachOutline, closeOutline, homeSharp, sendOutline } from "ionicons/icons";
+import { attachOutline, brushOutline, businessOutline, calculatorOutline, clipboardOutline, closeOutline, hammerOutline, homeSharp, lockClosed, peopleOutline, sendOutline } from "ionicons/icons";
 import DocumentController from "../DocumentController/DocumentController";
 import '../DocumentController/DocumentController.css'
 import Timesheet from "../Task/objects/Timesheet/Timesheet";
 import '../Task/objects/Timesheet/Timesheet.css'
+import MyTasks from "../MyTasks/Index";
+import Users from "../Users/Index";
+import Rate from "../Rates/Index";
+import Admin from "../Admin/Index";
 const HomeView = (props:any) =>{
 
     /**envvariables */
-    const [taskId, setTaskId]                           = useState<any>()
-    const [projectId, setProjectId]                     = useState<any>()
+    const [taskId, setTaskId]                           = useState<any>(0)
+    const [projectId, setProjectId]                     = useState<any>(0)
     const [processId, setProcessId]                     = useState<any>()
     const [workFlowTemplateId, setWorkFlowTemplateId]   = useState<any>()
     const [pageLocation, setPageLocation]               = useState<any>()
@@ -36,7 +40,10 @@ const HomeView = (props:any) =>{
     /**views */
     const [projectView, setProjectView]                 = useState<any>()
     const [taskView, setTaskView]                       = useState<any>()
-
+    const [getMyTasks, setMyTasks]                      = useState<any>()
+    const [getUsers, setUsers]                          = useState<any>()
+    const [getRates, setRates]                          = useState<any>()
+    const [getAdmin, setAdmin]                          = useState<any>()
 
 
     const callProject = async () =>{
@@ -110,11 +117,19 @@ const HomeView = (props:any) =>{
         switch(v){
             case 1:setProjectView(true);callProject();setPageLocation(null);break;
             case 2:setTaskView(true);callTaskCategory();break;
+            case 3:setMyTasks(true);break;
+            case 4:setUsers(true);break;
+            case 5:setRates(true);break;
+            case 6:setAdmin(true);break;
         }
     }
     const resetView =()=>{
         setProjectView(false);
         setTaskView(false);
+        setMyTasks(false);
+        setUsers(false);
+        setRates(false);
+        setAdmin(false);
     }
     useEffect(()=>{
         if(timesheetParams != null){
@@ -143,20 +158,98 @@ const HomeView = (props:any) =>{
     },[projectId])
 
     useEffect(()=>{
-        setView(1)
+        setView(3)
     },[])
     return(
-        <div style={{position:"absolute", left:"10%",width:"80%", height:"90vh",top:"10vh"}}>
-            <IonRow className='ion-padding size-24'>
-                <IonCol size="1">
-                    <IonIcon icon={homeSharp} className="size-48" 
+        <div style={{position:"absolute", left:"5%",width:"90%", height:"90vh",top:"2.5vh"}}>
+            <IonRow className="ion-padding" style={{borderBottom:"4px solid lightblue", marginBottom:"1vh"}}>
+                <IonCol>
+                    <IonImg src="../../public/images/skyview.png" style={{width:"120px"}}></IonImg>
+                </IonCol>
+                <IonCol size="2" className="ion-text-right ion-padding size-22">
+                    <IonRow className="text-container">
+                        <IonCol size="1">
+                            <IonIcon icon={lockClosed} className="size-48"></IonIcon>
+                        </IonCol>
+                        <IonCol className="ion-padding ion-text-center">
+                            <IonLabel>{props.state.email}</IonLabel>
+                        </IonCol>
+                    </IonRow>
+                </IonCol>
+            </IonRow>
+            <IonRow>
+                <IonCol size="2">
+                    <IonRow 
+                        style={{ backgroundColor: "#DEF1FF" }}
+                        className='ion-padding size-24 text-container-borderless ion-text-bold'
                         onClick={()=>{
                             setView(1)
                         }}
-                    ></IonIcon>
+                    >
+                        <IonCol size="1">
+                            <IonIcon icon={businessOutline} className="size-48" style={{color:"#005BD3"}}></IonIcon>
+                        </IonCol>
+                        <IonCol size="11" className="ion-padding"  style={{color:"#005BD3"}}>
+                            &nbsp;Projects
+                        </IonCol>
+                    </IonRow>
                 </IonCol>
                 <IonCol size="2">
-                    <div className=" ion-padding" style={{backgroundColor:getPastelColor(pageLocation),borderRadius:"24px"}}>{pageLocation}</div>
+                    <IonRow className='ion-padding size-24 text-container ion-text-bold'
+                        onClick={()=>{
+                            setView(3)
+                        }}
+                    >
+                        <IonCol size="1">
+                            <IonIcon icon={clipboardOutline} className="size-48"></IonIcon>
+                        </IonCol>
+                        <IonCol size="11" className="ion-padding">
+                            &nbsp;My Tasks
+                        </IonCol>
+                    </IonRow>
+                </IonCol>
+                
+                <IonCol size="2">
+                    <IonRow className='ion-padding size-24 text-container ion-text-bold'
+                        onClick={()=>{
+                            setView(4)
+                        }}
+                    >
+                        <IonCol size="1">
+                            <IonIcon icon={peopleOutline} className="size-48"></IonIcon>
+                        </IonCol>
+                        <IonCol size="11" className="ion-padding">
+                            &nbsp;System Users
+                        </IonCol>
+                    </IonRow>
+                </IonCol>
+                <IonCol size="2">
+                    <IonRow className='ion-padding size-24 text-container ion-text-bold'
+                        onClick={()=>{
+                            setView(5)
+                        }}
+                    >
+                        <IonCol size="1">
+                            <IonIcon icon={calculatorOutline} className="size-48"></IonIcon>
+                        </IonCol>
+                        <IonCol size="11" className="ion-padding">
+                            &nbsp;Charge Rates
+                        </IonCol>
+                    </IonRow>
+                </IonCol>
+                <IonCol size="2">
+                    <IonRow className='ion-padding size-24 text-container ion-text-bold'
+                        onClick={()=>{
+                            setView(6)
+                        }}
+                    >
+                        <IonCol size="1">
+                            <IonIcon icon={hammerOutline} className="size-48"></IonIcon>
+                        </IonCol>
+                        <IonCol size="11" className="ion-padding">
+                            &nbsp;Admin
+                        </IonCol>
+                    </IonRow>
                 </IonCol>
             </IonRow>
             {showChat &&
@@ -192,20 +285,85 @@ const HomeView = (props:any) =>{
                 </div>
             }
             {projectView &&
-            <IonRow className='ion-padding'>
-                <IonCol style={{overflowY:"auto",height:"70vh"}}>
-                    {projectObject}
+            <IonRow>
+                <IonCol size="3">
+                    <IonRow className='ion-padding size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={businessOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Project Home</IonCol>
+                    </IonRow>
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={brushOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Create New Project</IonCol>
+                    </IonRow>
+                    <IonRow><IonCol></IonCol></IonRow>
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={businessOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Existing Project</IonCol>
+                    </IonRow>
+                </IonCol>
+                <IonCol>
+                    <IonRow className='ion-padding'>
+                        <IonCol style={{overflowY:"auto",height:"70vh"}}>
+                            {projectObject}
+                        </IonCol>
+                    </IonRow>
                 </IonCol>
             </IonRow>
             }
             {taskView && 
             <IonRow className='ion-padding'>
+                <IonCol size="3">
+                    <IonRow className='ion-padding size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={businessOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Project Home</IonCol>
+                    </IonRow>
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={brushOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Create New Project</IonCol>
+                    </IonRow>
+                    <IonRow><IonCol></IonCol></IonRow>
+                    <IonRow className='ion-padding text-container size-24 ion-text-bold'>
+                        <IonCol size="1"><IonIcon icon={businessOutline} className="size-48"></IonIcon></IonCol>
+                        <IonCol className="ion-padding">Existing Project</IonCol>
+                    </IonRow>
+                </IonCol>
                 <IonCol style={{overflowY:"auto",height:"70vh"}}>
                     {taskCategoryObject}
                 </IonCol>
             </IonRow>
             }
-            
+            {getMyTasks &&
+            <div>
+                <MyTasks
+                    state={props.state}
+                    chat = {(e:any)=>{setTaskNoteData(e.data);setTaskId(e.task_id);setProjectId(e.project_id);console.log(e)}}
+                    timesheet = {(e:any)=>{setTimesheetParams(e);}}
+                    location={(e:any)=>{setPageLocation(e)}}
+                    result={(e:any)=>{console.log(e);setTaskId(e)}}
+                />
+            </div>
+            }
+            {getUsers &&
+            <div>
+                <Users
+                    state={props.state}
+                />
+            </div>
+            }
+            {getRates &&
+            <div>
+                <Rate
+                    state={props.state}
+                />
+            </div>
+            }
+            {getAdmin &&
+            <div>
+                <Admin
+                    state={props.state}
+                />
+            </div>
+            }
         </div>
     )
 }

@@ -49,9 +49,11 @@ const Login = (props: any) => {
         <div className="login-container">
             <div>
                 <IonRow>
+                    <IonCol size="4"></IonCol>
                     <IonCol className='ion-text-center'>
-                        <IonImg src="../../assets/images/ok-logo.png" style={{width:"128px"}} className="size-36 logo" alt="Logo" />
+                        <IonImg src="../../public/images/skyview.png" style={{width:"150px"}}></IonImg>
                     </IonCol>
+                    <IonCol size="4"></IonCol>
                 </IonRow>
                 
                 <IonRow>
